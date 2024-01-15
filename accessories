@@ -1,0 +1,226 @@
+<!-- nws-pdp-template -->
+  <div class="nws-pdp-template nws-space-2" {% if section.settings.section-color != blank %}style="background-color:{{ section.settings.section-color }};"{% endif %} >
+    <div class="container" >
+      {% render 'kt_breadcrumb' %}
+      <div class="nws-pdp-template-content row">
+        <div class="col-lg-6 col-md-6 col-sm-12" >
+          <div class="nws-pdp-template-gallery" >
+            <div class="nws-pdp-template-oneImagePhoto clearfix">
+             {% for image in product.images %}
+               <div class="nws-pdp-slide-main" >
+                 <div class="nws-pdp-slide product-img--main__image zoom" onmousemove="zoom(event)" style="background-image: url('{{ image.src | product_img_url: 'master' }}')" >
+                   <img width="auto" height="auto" loading="lazy" src="{{ image.src | product_img_url: '1000x' }}" width="100%" height="100%" alt="{{ image.alt }}" />
+                 </div>
+               </div>
+             {% endfor %}
+            </div>
+            <div class="nws-pdp-template-oneImageThumb clearfix">
+             {% for image in product.images %}
+               <div class="nws-pdp-slide-main" >
+                 <div class="nws-pdp-slide" >
+                   <img width="auto" height="auto" loading="lazy" src="{{ image.src | product_img_url: '120x' }}" width="100%" height="100%" alt="{{ image.alt }}" />
+                 </div>
+               </div>
+             {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12" >
+          <div class="nws-pdp-template-form" >
+            <div class="nws-pdp-template-info" >
+              <h1 class="heading-nws" >{{ product.title }}</h1>
+              <!-- Stamped - Begin Star Rating Badge -->
+              <span 
+              class="stamped-product-reviews-badge" 
+              data-id="{{ product.id }}"
+              data-product-sku="{{ product.handle }}" 
+              data-product-type="{{product.type}}" 
+              data-product-title="{{product.title}}" 
+              style="display:block;">
+              </span>
+              <!-- Stamped - End Star Rating Badge -->
+            </div>
+            <form class="product-form product-form-product-template" method="post" action="/cart/add" data-productid="{{ product.id }}" id="product-form-{{ product.variants.first.id }}" accept-charset="UTF-8" enctype="multipart/form-data" novalidate="novalidate" data-product-form="">
+              <input type="hidden" name="form_type" value="product">
+              <input type="hidden" name="utf8" value="✓">
+              
+              {%- assign current_variant = product.selected_or_first_available_variant -%}
+              <div class="product__price">
+                {% include 'nws-product-price', variant: current_variant, product: product %}
+              </div>
+
+              <div class="nws-description-item-short">{{ product.description }}</div>
+
+                <select id="nws-variant-id" class="product-form__variants no-js d-none"  name="id" data-productid="{{ product.id }}"  >
+                  {% for variant in product.variants %}
+                    <option data-val="{{ variant.title }}" value="{{ variant.id }}" {%- if variant == current_variant %} selected="selected" {%- endif -%} >{{ variant.title }}  {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}</option>
+                  {% endfor %}
+                </select>
+              
+                <div class="nws-pdp-submit-div" >
+                  {% if product.available %}
+                    <div class="nws-pdp-submit-wishlist" >
+                      <input id="nws-pdp-submit" type="submit" value="ORDER NOW" class="btn cls-chr nws-pdp-submit" />
+                      <span class="nws-wishlist-btn">
+                         <a class="action--wishlist tile-actions--btn flex wishlist-btn" href="#" data-product-handle="{{ product.handle }}">
+                           <span class="wishlist-loader--image">
+                             <div class="wishlist-loader--icon">
+                               <svg fill="#000000" width="24px" height="24px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><rect id="Icons" x="0" y="-256" width="1280" height="800" style="fill:none;"/></rect><path d="M43.201,9.05c5.137,0.117 9.855,3.451 11.782,8.485c2.391,6.249 0.678,13.452 -2.495,19.624c-3.793,7.375 -10.791,12.703 -17.967,17.288c0,0 -2.796,1.351 -5.515,-0.403c-9.246,-6.021 -17.878,-13.963 -20.319,-24.82c-1.856,-8.258 1.162,-18.596 10.582,-20.034c4.721,-0.721 11.109,2.766 12.809,5.869c1.657,-3.095 6.565,-5.884 10.693,-6.008c0.215,-0.002 0.215,-0.003 0.43,-0.001Zm-0.345,4c-5.376,0.161 -9.147,5.813 -10.778,10.382c-0.469,-1.314 -0.547,-1.46 -0.837,-2.109c-0.213,-0.475 -0.441,-0.944 -0.686,-1.404c-2.768,-5.203 -9.656,-9.851 -15.327,-4.491c-5.945,5.618 -2.904,17.477 3.22,24.628c3.825,4.467 8.614,8.029 13.63,11.204c6.568,-4.158 13.216,-8.901 16.708,-15.645c3.642,-7.035 5.85,-16.548 -1.033,-21.12c-0.613,-0.408 -1.278,-0.739 -1.974,-0.98c-0.949,-0.329 -1.596,-0.481 -2.923,-0.465Z" style="fill-rule:nonzero;"/></path></svg>
+                             </div>
+                             <div class="wishlist-loader-fill-icon">
+                               <svg fill="#000000" width="24px" height="24px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><rect id="Icons" x="-64" y="-256" width="1280" height="800" style="fill:none;"/></rect><path d="M43.046,9.05c5.137,0.117 9.856,3.451 11.782,8.485c2.392,6.249 0.678,13.452 -2.495,19.624c-3.792,7.375 -10.79,12.703 -17.966,17.288c0,0 -2.796,1.351 -5.516,-0.403c-9.246,-6.021 -17.877,-13.963 -20.318,-24.82c-1.857,-8.258 1.161,-18.596 10.582,-20.034c4.72,-0.721 11.109,2.766 12.808,5.869c1.657,-3.095 6.565,-5.884 10.694,-6.008c0.215,-0.002 0.214,-0.003 0.429,-0.001Z" style="fill-rule:nonzero;"/></path></svg>
+                             </div>
+                           </span>
+                         </a>
+                       </span>
+                     </div>
+                     <a href="/cart/{{ product.selected_or_first_available_variant.id }}:1" class="btn cls-chr nws-pdp-submit btn-buy-now" >BUY NOW</a>
+                  {% else %}
+                    <div class="nws-pdp-submit-wishlist" >
+                      <input type="button" value="Sold Out" class="btn nws-pdp-submit" disabled="disabled" />
+                      <span class="nws-wishlist-btn">
+                         <a class="action--wishlist tile-actions--btn flex wishlist-btn" href="#" data-product-handle="{{ product.handle }}">
+                           <span class="wishlist-loader--image">
+                             <div class="wishlist-loader--icon">
+                               <svg fill="#000000" width="24px" height="24px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><rect id="Icons" x="0" y="-256" width="1280" height="800" style="fill:none;"/></rect><path d="M43.201,9.05c5.137,0.117 9.855,3.451 11.782,8.485c2.391,6.249 0.678,13.452 -2.495,19.624c-3.793,7.375 -10.791,12.703 -17.967,17.288c0,0 -2.796,1.351 -5.515,-0.403c-9.246,-6.021 -17.878,-13.963 -20.319,-24.82c-1.856,-8.258 1.162,-18.596 10.582,-20.034c4.721,-0.721 11.109,2.766 12.809,5.869c1.657,-3.095 6.565,-5.884 10.693,-6.008c0.215,-0.002 0.215,-0.003 0.43,-0.001Zm-0.345,4c-5.376,0.161 -9.147,5.813 -10.778,10.382c-0.469,-1.314 -0.547,-1.46 -0.837,-2.109c-0.213,-0.475 -0.441,-0.944 -0.686,-1.404c-2.768,-5.203 -9.656,-9.851 -15.327,-4.491c-5.945,5.618 -2.904,17.477 3.22,24.628c3.825,4.467 8.614,8.029 13.63,11.204c6.568,-4.158 13.216,-8.901 16.708,-15.645c3.642,-7.035 5.85,-16.548 -1.033,-21.12c-0.613,-0.408 -1.278,-0.739 -1.974,-0.98c-0.949,-0.329 -1.596,-0.481 -2.923,-0.465Z" style="fill-rule:nonzero;"/></path></svg>
+                             </div>
+                             <div class="wishlist-loader-fill-icon">
+                               <svg fill="#000000" width="24px" height="24px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><rect id="Icons" x="-64" y="-256" width="1280" height="800" style="fill:none;"/></rect><path d="M43.046,9.05c5.137,0.117 9.856,3.451 11.782,8.485c2.392,6.249 0.678,13.452 -2.495,19.624c-3.792,7.375 -10.79,12.703 -17.966,17.288c0,0 -2.796,1.351 -5.516,-0.403c-9.246,-6.021 -17.877,-13.963 -20.318,-24.82c-1.857,-8.258 1.161,-18.596 10.582,-20.034c4.72,-0.721 11.109,2.766 12.808,5.869c1.657,-3.095 6.565,-5.884 10.694,-6.008c0.215,-0.002 0.214,-0.003 0.429,-0.001Z" style="fill-rule:nonzero;"/></path></svg>
+                             </div>
+                           </span>
+                         </a>
+                       </span>
+                     </div>
+                  {% endif %}
+
+                </div>
+            </form> 
+            {% render 'nws-back-in-stock', product: product %}
+    
+            {% assign customLink = product.metafields.custom.description_video %}
+            {% if customLink != blank or product.metafields.custom.description_text != blank %}
+              <div class="nws-pdp-template-description" >  
+                <div class="nws-description-item">
+                  <h3 class="nws-description-item-title">Description</h3>
+                  <div class="nws-description-item-body">
+                    <div class="nws-description-item-body-inner" >{{ product.metafields.custom.description_text | metafield_tag }}</div>
+                    {% if customLink != blank %}
+                      {% assign clnLinkCheck = customLink | replace: "/"," "  %}
+                      {% assign clnLink = customLink 
+                        | replace: "https://youtu.be/","" 
+                        | replace: "http://youtu.be/","" 
+                        | replace: "https://www.youtube.com/watch?v=","" 
+                        | replace: "http://www.youtube.com/watch?v=","" 
+                        | replace: "https://youtube.com/watch?v=","" 
+                        | replace: "http://youtube.com/watch?v=","" 
+                        | replace: "https://www.vimeo.com/","" 
+                        | replace: "https://vimeo.com/",""
+                        | replace: "youtu.be/","" 
+                        | replace: "www.youtube.com/watch?v=","" 
+                        | replace: "youtube.com/watch?v=",""  
+                        | replace: "www.vimeo.com/","" 
+                        | replace: "vimeo.com/","" 
+                      %}
+                      <div class="nws-pdp-video-dp-new">
+                        {% if clnLinkCheck contains "www.youtube.com" or clnLinkCheck contains "youtube.com" or clnLinkCheck contains "youtu.be" %}
+                            {% assign video-url = "https://www.youtube.com/watch?v=" | append: clnLink %}
+                        {% endif %}
+                        {% if clnLinkCheck contains "www.vimeo.com" or clnLinkCheck contains "vimeo.com" %}
+                            {% assign video-url = "https://vimeo.com/" | append: clnLink  %}
+                        {% endif %}
+                        <div class="nws-popup-video-img nws-popup-video-up" href="{{video-url}}" >
+                          <span class="nws-video-icon" >
+                            <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M17.5 9.63398C18.1667 10.0189 18.1667 10.9811 17.5 11.366L1.75 20.4593C1.08333 20.8442 0.250001 20.3631 0.250001 19.5933L0.250002 1.40673C0.250002 0.636933 1.08334 0.155807 1.75 0.540708L17.5 9.63398Z" fill="white"/></path>
+                            </svg> 
+                          </span>
+                          {% if clnLinkCheck contains "www.youtube.com" or clnLinkCheck contains "youtube.com" or clnLinkCheck contains "youtu.be" %}
+                            <img src="https://img.youtube.com/vi/{{ clnLink }}/sddefault.jpg" width="auto" height="auto" loading="lazy" />
+                          {% endif %}
+                          {% if clnLinkCheck contains "www.vimeo.com" or clnLinkCheck contains "vimeo.com" %}
+                            <img src="https://vumbnail.com/{{ clnLink }}.jpg" width="auto" height="auto" loading="lazy" />
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if product.metafields.custom.features_benefits_list != blank %}
+              <div class="nws-pdp-template-description nws-pdp-temp-desp" >  
+                <div class="nws-description-item">
+                  <h3 class="nws-description-item-title">Features & Benefits</h3>
+                  <div class="nws-description-item-body nws-benefits-list">{{ product.metafields.custom.features_benefits_list }}</div>
+                </div>
+              </div>
+            {% endif %}
+            {% assign customLink = product.metafields.custom.works_video %}
+            {% if customLink != blank or product.metafields.custom.how_it_works_text != blank  %}
+              <div class="nws-pdp-template-description nws-pdp-temp-desp" >  
+                <div class="nws-description-item">
+                  <h3 class="nws-description-item-title">How it Works</h3>
+                  <div class="nws-description-item-body">
+                    <div class="nws-description-item-body-inner" >{{ product.metafields.custom.how_it_works_text | metafield_tag }}</div>
+                    {% if customLink != blank %}
+                      {% assign clnLinkCheck = customLink | replace: "/"," "  %}
+                      {% assign clnLink = customLink 
+                        | replace: "https://youtu.be/","" 
+                        | replace: "http://youtu.be/","" 
+                        | replace: "https://www.youtube.com/watch?v=","" 
+                        | replace: "http://www.youtube.com/watch?v=","" 
+                        | replace: "https://youtube.com/watch?v=","" 
+                        | replace: "http://youtube.com/watch?v=","" 
+                        | replace: "https://www.vimeo.com/","" 
+                        | replace: "https://vimeo.com/",""
+                        | replace: "youtu.be/","" 
+                        | replace: "www.youtube.com/watch?v=","" 
+                        | replace: "youtube.com/watch?v=",""  
+                        | replace: "www.vimeo.com/","" 
+                        | replace: "vimeo.com/","" 
+                      %}
+                      <div class="nws-pdp-video-dp-new">
+                        {% if clnLinkCheck contains "www.youtube.com" or clnLinkCheck contains "youtube.com" or clnLinkCheck contains "youtu.be" %}
+                            {% assign video-url = "https://www.youtube.com/watch?v=" | append: clnLink %}
+                        {% endif %}
+                        {% if clnLinkCheck contains "www.vimeo.com" or clnLinkCheck contains "vimeo.com" %}
+                            {% assign video-url = "https://vimeo.com/" | append: clnLink  %}
+                        {% endif %}
+                        <div class="nws-popup-video-img nws-popup-video-up" href="{{video-url}}" >
+                          <span class="nws-video-icon" >
+                            <svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M17.5 9.63398C18.1667 10.0189 18.1667 10.9811 17.5 11.366L1.75 20.4593C1.08333 20.8442 0.250001 20.3631 0.250001 19.5933L0.250002 1.40673C0.250002 0.636933 1.08334 0.155807 1.75 0.540708L17.5 9.63398Z" fill="white"/></path>
+                            </svg> 
+                          </span>
+                          {% if clnLinkCheck contains "www.youtube.com" or clnLinkCheck contains "youtube.com" or clnLinkCheck contains "youtu.be" %}
+                            <img src="https://img.youtube.com/vi/{{ clnLink }}/sddefault.jpg" width="auto" height="auto" loading="lazy" />
+                          {% endif %}
+                          {% if clnLinkCheck contains "www.vimeo.com" or clnLinkCheck contains "vimeo.com" %}
+                            <img src="https://vumbnail.com/{{ clnLink }}.jpg" width="auto" height="auto" loading="lazy" />
+                          {% endif %}
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- end nws-pdp-template -->
+{% schema %}
+  {
+    "name": "NWS - PDP Template",
+    "settings": [
+        {
+          "type": "color",
+          "id": "section-color",
+          "label": "Section BG Color"
+        }
+    ]
+  }
+{% endschema %}
